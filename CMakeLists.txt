@@ -49,6 +49,7 @@ endif()
 add_library(mir_static STATIC)
 target_link_libraries(mir_static PRIVATE mir)
 
+#[[
 # ------------------ LIBMIR SO --------------------
 add_library(mir_shared SHARED)
 target_link_libraries(mir_shared PRIVATE mir)
@@ -234,3 +235,4 @@ add_test(mir2c-test mir2c_test)
 
 add_test(c2mir-simple-test c2m -v ${PROJECT_SOURCE_DIR}/sieve.c -ei)
 
+]]
