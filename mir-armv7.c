@@ -249,7 +249,7 @@ static const uint32_t ldld_pat = 0x3dc00260; /* ldr q, [x19], offset */
    x10=mem[x19,<offset>]; res_reg=mem[x10]; ...
    pop x19, x30; ret x30. */
 void *_MIR_get_ff_call (MIR_context_t ctx, size_t nres, MIR_type_t *res_types, size_t nargs,
-                        _MIR_arg_desc_t *arg_descs, int vararg_p) {
+                        _MIR_arg_desc_t *arg_descs, size_t vararg_p) {
   static const uint32_t prolog[] = {
     0xa9bf7bf3, /* stp x19,x30,[sp, -16]! */
     0xd10003ff, /* sub sp,sp,<sp_offset> */

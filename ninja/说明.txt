@@ -1,0 +1,1 @@
+只有win的，如要跑在其他平台，要加 https://github.com/ninja-build/ninja/releases
