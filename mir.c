@@ -551,8 +551,8 @@ void MIR_set_error_func (MIR_context_t ctx, MIR_error_func_t func) {  // ?? atom
 
 static htab_hash_t item_hash (MIR_item_t it, void *arg) {
   return mir_hash_finish (
-    mir_hash_step (mir_hash_step (mir_hash_init (28), (uint64_t) MIR_item_name (NULL, it)),
-                   (uint64_t) it->module));
+    mir_hash_step (mir_hash_step (mir_hash_init (28), (uintptr_t) MIR_item_name (NULL, it)),
+                   (uintptr_t) it->module));
 }
 static int item_eq (MIR_item_t it1, MIR_item_t it2, void *arg) {
   return it1->module == it2->module && MIR_item_name (NULL, it1) == MIR_item_name (NULL, it2);
@@ -2234,9 +2234,9 @@ htab_hash_t MIR_op_hash_step (MIR_context_t ctx, htab_hash_t h, MIR_op_t op) {
   }
   case MIR_OP_REF:
     if (op.u.ref->item_type == MIR_export_item || op.u.ref->item_type == MIR_import_item)
-      return mir_hash_step (h, (uint64_t) MIR_item_name (ctx, op.u.ref));
+      return mir_hash_step (h, (uintptr_t) MIR_item_name (ctx, op.u.ref));
     return mir_hash_step (h, (uint64_t) op.u.ref);
-  case MIR_OP_STR: return mir_hash_step (h, (uint64_t) op.u.str.s);
+  case MIR_OP_STR: return mir_hash_step (h, (uintptr_t) op.u.str.s);
   case MIR_OP_MEM:
     h = mir_hash_step (h, (uint64_t) op.u.mem.type);
     h = mir_hash_step (h, (uint64_t) op.u.mem.disp);
@@ -2252,7 +2252,7 @@ htab_hash_t MIR_op_hash_step (MIR_context_t ctx, htab_hash_t h, MIR_op_t op) {
     if (op.u.hard_reg_mem.index != MIR_NON_HARD_REG)
       h = mir_hash_step (h, (uint64_t) op.u.hard_reg_mem.scale);
     break;
-  case MIR_OP_LABEL: return mir_hash_step (h, (uint64_t) op.u.label);
+  case MIR_OP_LABEL: return mir_hash_step (h, (uintptr_t) op.u.label);
   default: mir_assert (FALSE); /* we should not have other operands here */
   }
   return h;
@@ -3703,7 +3703,7 @@ static code_holder_t *get_last_code_holder (MIR_context_t ctx, size_t size) {
 
   if ((len = VARR_LENGTH (code_holder_t, code_holders)) > 0) {
     ch_ptr = VARR_ADDR (code_holder_t, code_holders) + len - 1;
-    ch_ptr->free = (uint8_t *) ((uint64_t) (ch_ptr->free + 15) / 16 * 16); /* align */
+    ch_ptr->free = (uint8_t *) ((uintptr_t) (ch_ptr->free + 15) / 16 * 16); /* align */
     if (ch_ptr->free + size <= ch_ptr->bound) return ch_ptr;
   }
   npages = (size + page_size) / page_size;
@@ -6061,6 +6061,9 @@ void _MIR_dump_code (const char *name, int index, uint8_t *code, size_t code_len
 #error "RISCV 128-bit floats (Q set) is not supported"
 #endif
 #include "mir-riscv64.c"
+#elif defined(__ARM_ARCH) && (__ARM_ARCH == 7)
+#define MIR_ARMV7 1
+#include "mir-armv7.c"
 #else
 #error "undefined or unsupported generation target"
 #endif
