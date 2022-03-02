@@ -2363,3 +2363,7 @@ static void target_finish (gen_ctx_t gen_ctx) {
   free (gen_ctx->target_ctx);
   gen_ctx->target_ctx = NULL;
 }
+
+static int target_valid_mem_offset_p (gen_ctx_t gen_ctx, MIR_type_t type, MIR_disp_t offset) {
+  return TRUE;
+}
